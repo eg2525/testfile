@@ -1,49 +1,44 @@
 import streamlit as st
 import pandas as pd
-from io import StringIO, BytesIO
-import openpyxl  # Excelファイルの処理に必要
-import base64  # base64エンコーディング用
+from io import BytesIO
+import openpyxl
 
 def app1():
-    # Streamlitアプリのタイトル
     st.title('仕訳インポート')
+    st.markdown("ここにアプリの説明文を追加します。")
 
-    # 説明文の追加（Markdown形式）
-    st.markdown("""
-        ここにアプリの説明文を追加します。
-        """)
-
-    # ファイルアップローダー
     uploaded_file = st.file_uploader("ファイルをアップロードしてください", type=['csv', 'xlsx'])
 
-    # アップロードされたファイルがあれば処理を実行
     if uploaded_file is not None:
-        try:
-            # ファイルの拡張子に基づいて処理を分岐
-            if uploaded_file.name.endswith('.csv'):
-                # cp932エンコーディングでCSVを読み込む
-                df = pd.read_csv(uploaded_file, encoding='cp932')
-            elif uploaded_file.name.endswith('.xlsx'):
-                # Excelファイルを読み込む
-                df = pd.read_excel(uploaded_file)
-
-            # 新しいDataFrameを作成
-            new_headers = ["日付","伝票番号","決算整理仕訳","借方勘定科目","借方科目コード","借方補助科目","借方取引先","借方取引先コード","借方部門","借方品目","借方メモタグ","借方セグメント1","借方セグメント2","借方セグメント3","借方金額","借方税区分","借方税額","貸方勘定科目","貸方科目コード","貸方補助科目","貸方取引先","貸方取引先コード","貸方部門","貸方品目","貸方メモタグ","貸方セグメント1","貸方セグメント2","貸方セグメント3","貸方金額","貸方税区分","貸方税額","摘要"]  # ヘッダーのリストを続ける
-            new_df = pd.DataFrame(columns=new_headers)
-            # ここで新しいDataFrameにデータを追加・編集する処理があればここに記述
+        if uploaded_file.name.endswith('.csv'):
+            df = pd.read_csv(uploaded_file, encoding='cp932')
+        else:
+            df = pd.read_excel(uploaded_file)
         
-        except Exception as e:
-            st.error(f"エラーが発生しました: {e}")
-            # ここにエラー処理のコードを追加する
+        # アップロードされたファイルのヘッダーを取得
+        uploaded_headers = df.columns.tolist()
 
-    # ダウンロードボタンを表示する
-    if 'new_df' in locals():
-        st.download_button(
-            label="新しいExcelファイルをダウンロード",
-            data=convert_df_to_excel(new_df),
-            file_name='新規データ.xlsx',
-            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
+        # 新しいDataFrameのヘッダー
+        new_headers = ["日付","伝票番号","決算整理仕訳","借方勘定科目","借方科目コード","借方補助科目","借方取引先","借方取引先コード","借方部門","借方品目","借方メモタグ","借方セグメント1","借方セグメント2","借方セグメント3","借方金額","借方税区分","借方税額","貸方勘定科目","貸方科目コード","貸方補助科目","貸方取引先","貸方取引先コード","貸方部門","貸方品目","貸方メモタグ","貸方セグメント1","貸方セグメント2","貸方セグメント3","貸方金額","貸方税区分","貸方税額","摘要"]  # ヘッダーのリストを続ける
 
-# アプリを実行
+        # ヘッダーのマッピングを設定するためのプルダウンメニューを生成
+        mappings = {}
+        for header in uploaded_headers:
+            mappings[header] = st.selectbox(f"{header} に対応するヘッダー:", new_headers, key=header)
+
+        # OKボタン
+        if st.button('OK'):
+            new_df = pd.DataFrame()
+            for in_header, out_header in mappings.items():
+                if out_header in df.columns:
+                    new_df[out_header] = df[in_header]
+            
+            # 新しいDataFrameをExcelファイルとして出力
+            towrite = BytesIO()
+            new_df.to_excel(towrite, index=False, engine='openpyxl')
+            towrite.seek(0)
+            b64 = base64.b64encode(towrite.read()).decode()
+            href = f'<a href="data:application/octet-stream;base64,{b64}" download="新規データ.xlsx">新規データ.xlsxをダウンロード</a>'
+            st.markdown(href, unsafe_allow_html=True)
+
 app1()
