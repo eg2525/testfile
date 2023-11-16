@@ -36,15 +36,6 @@ def app1():
             st.error(f"エラーが発生しました: {e}")
             # ここにエラー処理のコードを追加する
 
-    # Excelファイルとしてユーザーにダウンロードさせる関数
-    def convert_df_to_excel(df):
-        output = BytesIO()
-        writer = pd.ExcelWriter(output, engine='openpyxl')
-        df.to_excel(writer, index=False, sheet_name='Sheet1')
-        writer.save()
-        processed_data = output.getvalue()
-        return processed_data
-
     # ダウンロードボタンを表示する
     if 'new_df' in locals():
         st.download_button(
