@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 import openpyxl
+import base64
 
 def app1():
     st.title('仕訳インポート')
