@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
-import openpyxl
 import base64
 
 def app1():
@@ -13,7 +12,7 @@ def app1():
     if uploaded_file is not None:
         if uploaded_file.name.endswith('.csv'):
             df = pd.read_csv(uploaded_file, encoding='cp932')
-        else:
+        elif uploaded_file.name.endswith('.xlsx'):
             df = pd.read_excel(uploaded_file)
 
         uploaded_headers = df.columns.tolist()
@@ -37,11 +36,11 @@ def app1():
                 if out_header != "転記しない":  # 「転記しない」が選択されていない場合に転記
                     new_df[out_header] = df[in_header]
 
-            # 新しいDataFrameをExcelファイルに変換してダウンロードリンクを提供
+            # Excelファイルのダウンロードリンクを提供
             towrite = BytesIO()
-            new_df.to_excel(towrite, index=False, engine='openpyxl')
-            towrite.seek(0)
-            b64 = base64.b64encode(towrite.read()).decode()
+            new_df.to_excel(towrite, index=False)  # engine='openpyxl'は省略可能です
+            towrite.seek(0)  # ファイルポインタを先頭に戻す
+            b64 = base64.b64encode(towrite.read()).decode()  # バイトデータをbase64にエンコード
             href = f'<a href="data:application/octet-stream;base64,{b64}" download="新規データ.xlsx">新規データ.xlsxをダウンロード</a>'
             st.markdown(href, unsafe_allow_html=True)
 
