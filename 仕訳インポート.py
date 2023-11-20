@@ -27,18 +27,23 @@ def app1():
         # アップロードされたファイルのヘッダーを取得
         uploaded_headers = df.columns.tolist()
         # プルダウン用に「転記しない」オプションを追加
-        options = ["転記しない"] + fixed_headers
+        options = ["転記しない"] + uploaded_headers
 
-        # マッピングの修正
-        mappings = {fixed_header: st.selectbox("", options, key=f"{fixed_header}_select") for fixed_header in fixed_headers}
+        # マッピングの構築
+        mappings = {}
+        for fixed_header in fixed_headers:
+            # 固定ヘッダーに対応するアップロードされたファイルのヘッダーを選択
+            mappings[fixed_header] = st.selectbox(f"Select column for: {fixed_header}", options, key=fixed_header)
 
+        # データの転記
         if st.button('OK'):
-            new_df = pd.DataFrame(columns=fixed_headers)
-            for fixed_header, selected_header in mappings.items():
-                if selected_header != "転記しない" and selected_header in df.columns:
-                    new_df[fixed_header] = df[selected_header]
+            new_df = pd.DataFrame()
+            for fixed_header in fixed_headers:
+                selected_header = mappings[fixed_header]
+                if selected_header != "転記しない":
+                    new_df[fixed_header] = df[selected_header] if selected_header in uploaded_headers else pd.NA
                 else:
-                    new_df[fixed_header] = None  # または pd.NA などを使う
+                    new_df[fixed_header] = pd.NA
 
             # Excelファイルのダウンロードリンクを提供
             towrite = BytesIO()
