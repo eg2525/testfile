@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import base64
 
-def app1():
+def ap():
     st.title('仕訳インポート')
     st.markdown("ここにアプリの説明文を追加します。")
 
@@ -24,16 +24,19 @@ def app1():
         fixed_headers = ["日付","伝票番号","決算整理仕訳","借方勘定科目","借方科目コード","借方補助科目","借方取引先","借方取引先コード","借方部門","借方品目","借方メモタグ","借方セグメント1","借方セグメント2","借方セグメント3","借方金額","借方税区分","借方税額","貸方勘定科目","貸方科目コード","貸方補助科目","貸方取引先","貸方取引先コード","貸方部門","貸方品目","貸方メモタグ","貸方セグメント1","貸方セグメント2","貸方セグメント3","貸方金額","貸方税区分","貸方税額","摘要"
 ] 
 
-        # アップロードされたファイルのヘッダーを取得
-        uploaded_headers = df.columns.tolist()
-        # プルダウン用に「転記しない」オプションを追加
+        # アップロードされたヘッダーの選択肢を準備します
         options = ["転記しない"] + uploaded_headers
 
-        # マッピングの構築
+        # ユーザーが各アップロードされたヘッダーに対して固定ヘッダーをどれにマッピングするかを選択できるようにします
         mappings = {}
         for fixed_header in fixed_headers:
-            # 固定ヘッダーに対応するアップロードされたファイルのヘッダーを選択
-            mappings[fixed_header] = st.selectbox(f"Select column for: {fixed_header}", options, key=fixed_header)
+            # 2列レイアウトのためにst.columnsを使用します
+            col1, col2 = st.columns([3, 2])  # 画面を左側が3の幅、右側が2の幅に分割します
+            with col1:
+                st.text(fixed_header)  # 固定ヘッダー名を左側に表示します
+            with col2:
+                # 固定ヘッダーに対応するアップロードされたファイルのヘッダーを選択するためのプルダウンメニューを右側に表示
+                mappings[fixed_header] = st.selectbox(f"Select column for: {fixed_header}", options, key=f"{fixed_header}_select")
 
         # データの転記
         if st.button('OK'):
@@ -53,4 +56,4 @@ def app1():
             href = f'<a href="data:application/octet-stream;base64,{b64}" download="仕訳インポート.xlsx">仕訳インポート.xlsxをダウンロード</a>'
             st.markdown(href, unsafe_allow_html=True)
 
-app1()
+app3()
