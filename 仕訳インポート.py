@@ -50,7 +50,7 @@ def app1():
             new_df.to_excel(towrite, index=False)  # engine='openpyxl'は省略可能です
             towrite.seek(0)
             b64 = base64.b64encode(towrite.read()).decode()
-            href = f'<a href="data:application/octet-stream;base64,{b64}" download="新規データ.xlsx">新規データ.xlsxをダウンロード</a>'
+            href = f'<a href="data:application/octet-stream;base64,{b64}" download="仕訳インポート.xlsx">仕訳インポート.xlsxをダウンロード</a>'
             st.markdown(href, unsafe_allow_html=True)
 
 app1()
