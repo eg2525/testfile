@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
-from excel_processing import process_excel_data  # excel_processingから関数をインポート
+from excel_processing_1 import process_excel_data  # excel_processingから関数をインポート
 
 st.title("freee部門分割")
 
