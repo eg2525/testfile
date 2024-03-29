@@ -1,8 +1,14 @@
 import streamlit as st
 import pandas as pd
 import os
-from excel_processing_1 import process_excel_data  # excel_processingから関数をインポート
-
+from excel_processing_1 import process_excel_data_1  # excel_processingから関数をインポート
+from excel_processing_2 import process_excel_data_2
+from excel_processing_3 import process_excel_data_3
+from excel_processing_4 import process_excel_data_4
+from excel_processing_5 import process_excel_data_5
+from excel_processing_6 import process_excel_data_6
+from excel_processing_7 import process_excel_data_7
+from excel_processing_8 import process_excel_data_8
 st.title("freee部門分割")
 
 st.markdown("""
@@ -51,7 +57,30 @@ if uploaded_file is not None:
                 df_excel.to_excel(writer, index=False, sheet_name=safe_sheet_name)
 
         # excel_processingの関数を呼び出して、Excelファイルの更新を行う
-        process_excel_data(df_uploaded, excel_filename, dynamic_columns)
+        process_excel_data_1(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_2(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_3(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_4(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_5(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_6(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_7(df_uploaded, excel_filename, dynamic_columns)
+
+        # excel_processingの関数を呼び出して、Excelファイルの更新を行う
+        process_excel_data_5(df_uploaded, excel_filename, dynamic_columns)
+
+
 
         if os.path.isfile(excel_filename):
             with open(excel_filename, "rb") as file:
