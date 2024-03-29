@@ -78,7 +78,7 @@ if uploaded_file is not None:
         process_excel_data_7(df_uploaded, excel_filename, dynamic_columns)
 
         # excel_processingの関数を呼び出して、Excelファイルの更新を行う
-        process_excel_data_5(df_uploaded, excel_filename, dynamic_columns)
+        process_excel_data_8(df_uploaded, excel_filename, dynamic_columns)
 
 
 
