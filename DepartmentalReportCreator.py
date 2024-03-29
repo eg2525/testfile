@@ -26,6 +26,7 @@ uploaded_file = st.file_uploader("ファイルをアップロードしてくだ�
 
 if uploaded_file is not None:
     if st.button('Start'):
+        uploaded_filename = uploaded_file.name  # アップロードされたファイルの名前を取得
         df_uploaded = pd.read_csv(uploaded_file, encoding='cp932', header=1)
         dynamic_columns = [col for col in df_uploaded.columns if col not in ('勘定科目コード', 'Unnamed: 1', '部門', '期間累計')]
 
@@ -78,7 +79,7 @@ if uploaded_file is not None:
         process_excel_data_7(df_uploaded, excel_filename, dynamic_columns)
 
         # excel_processingの関数を呼び出して、Excelファイルの更新を行う
-        process_excel_data_8(df_uploaded, excel_filename, dynamic_columns)
+        process_excel_data_8(df_uploaded, excel_filename, dynamic_columns, uploaded_filename)
 
 
 

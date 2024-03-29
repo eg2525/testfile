@@ -1,7 +1,7 @@
 import openpyxl
 from openpyxl.styles import Font, Border, Side
 
-def process_excel_data_8(df_uploaded, excel_filename, dynamic_columns):
+def process_excel_data_8(df_uploaded, excel_filename, dynamic_columns, uploaded_filename):
     
     # OpenPyXLでExcelファイルを開く
     wb = openpyxl.load_workbook(excel_filename)
