@@ -48,7 +48,7 @@ if st.button('処理開始'):
                             final_df.at[idx, column] = value
 
         # 編集可能なDataFrameを表示
-        edited_df = st.data_editor("編集可能なデータフレーム", final_df)
+        edited_df = st.data_editor(final_df)
 
         # 変更を保存するボタン
         if st.button("変更を保存"):
