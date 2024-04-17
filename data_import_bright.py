@@ -36,10 +36,8 @@ if st.button('処理開始'):
             "[点]後期高齢", "[点]国保窓口入金", "[点]社保窓口入金", "[点]合計", "[一・負]後期高齢", "[一・負]国保窓口入金", "[一・負]社保窓口入金", "[一・負]合計", "差額"
         ]
 
-        # 最終データフレームの初期化
+        # 最終データフレームの初期化とデータ転写完了後
         final_df = pd.DataFrame(index=index, columns=columns)
-
-        # 各ファイルのデータフレームに対してカラム名が一致するデータを転記
         for filename, data in dataframes.items():
             for column in columns:
                 if column in filename:
@@ -49,31 +47,19 @@ if st.button('処理開始'):
                             value = data[clean_index].iloc[31] if len(data[clean_index]) > 31 else None
                             final_df.at[idx, column] = value
 
-        # DataFrameを表示
-        st.write("現在のDataFrame:")
-        st.write(final_df)
+        # 編集可能なDataFrameを表示
+        edited_df = st.data_editor("編集可能なデータフレーム", final_df)
 
-        # '[点]後期高齢'に対する入力を求める
-        input_values = {}
-        for col in columns:
-            input_values[col] = st.text_input(f"{col}の'[点]後期高齢'の新しい値:", key=f"input_{col}")
-
-        # 入力された値でDataFrameを更新
-        if st.button('データを更新'):
-            for col in columns:
-                if input_values[col]:
-                    final_df.at['[点]後期高齢', col] = input_values[col]
-            st.write("更新されたDataFrame:")
-            st.write(final_df)
-
+        # 変更を保存するボタン
+        if st.button("変更を保存"):
             # CSVファイル名を指定して保存
             csv_file_name = 'updated_data.csv'
-            final_df.to_csv(csv_file_name, encoding='utf-8')
+            edited_df.to_csv(csv_file_name, encoding='utf-8')
 
             # ファイルをダウンロードするためのリンクを提供
             st.download_button(
                 label="Download updated data as CSV",
-                data=final_df.to_csv().encode('utf-8'),
+                data=edited_df.to_csv().encode('utf-8'),
                 file_name=csv_file_name,
                 mime='text/csv',
             )
