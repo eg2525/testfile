@@ -52,14 +52,25 @@ if st.button('処理開始'):
         # DataFrameを表示
         st.write(final_df)
 
-        # CSVファイル名を指定して保存
-        csv_file_name = 'final_data.csv'
-        final_df.to_csv(csv_file_name, encoding='cp932')
+        # 入力要求とデータ更新
+        if st.checkbox("データを更新しますか？", key='update_data'):
+            for col in columns:
+                new_value = st.text_input(f"{col}の'[点]後期高齢'の新しい値を入力してください:", key=col)
+                if new_value:
+                    final_df.at['[点]後期高齢', col] = new_value
 
-        # ファイルをダウンロードするためのリンクを提供
-        st.download_button(
-            label="Download data as CSV",
-            data=final_df.to_csv().encode('utf-8'),
-            file_name='final_data.csv',
-            mime='text/csv',
-        )
+            # 更新後のDataFrameを表示
+            st.write("更新されたDataFrame:")
+            st.write(final_df)
+
+            # CSVファイル名を指定して保存
+            csv_file_name = 'final_data.csv'
+            final_df.to_csv(csv_file_name, encoding='utf-8')
+
+            # ファイルをダウンロードするためのリンクを提供
+            st.download_button(
+                label="Download data as CSV",
+                data=final_df.to_csv().encode('utf-8'),
+                file_name='final_data.csv',
+                mime='text/csv',
+            )
