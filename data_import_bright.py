@@ -38,23 +38,31 @@ if st.checkbox('処理開始'):
         edited_df = st.data_editor(final_df)
 
         if st.button("変更を保存"):
-            # 新しいDataFrameのカラムを定義
             output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
-            # 空のDataFrameを作成
             output_df = pd.DataFrame(columns=output_columns)
 
-            # final_dfからoutput_dfへのデータ転記
             for col in final_df.columns:
                 for idx in final_df.index:
                     value = final_df.at[idx, col]
-                    # セルの値が0でもNoneでもない場合に転記
-                    if value != 0 and value is not None and value != '':
+
+                    # 空文字やNaNをNoneに統一し、数値型に変換を試みる
+                    if pd.isna(value):
+                        value = None
+                    else:
+                        try:
+                            # 数値型への強制変換を試みる
+                            value = float(value)
+                        except ValueError:
+                            continue  # 数値に変換できない場合はスキップ
+
+                    # Noneまたは0ではない場合に転記
+                    if value is not None and value != 0:
                         new_row = pd.DataFrame({
                             '品目': [idx],
                             '部門': [col],
                             '金額': [value]
                         }, columns=output_columns)
-                        output_df = pd.concat([output_df, new_row], ignore_index=True)  # 新しい行をDataFrameに追加
+                        output_df = pd.concat([output_df, new_row], ignore_index=True)
 
             st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
-            st.write(output_df)  # 最終的なDataFrameを表示
+            st.write(output_df)
