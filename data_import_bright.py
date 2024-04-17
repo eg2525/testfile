@@ -34,6 +34,8 @@ if st.checkbox('処理開始'):
                         if clean_index in data.columns:
                             value = data[clean_index].iloc[31] if len(data[clean_index]) > 31 else None
                             final_df.at[idx, column] = value
+        
+        edited_df = st.data_editor(final_df)
 
         if st.button("変更を保存"):
             # 新しいDataFrameのカラムを定義
