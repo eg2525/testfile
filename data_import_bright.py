@@ -94,7 +94,7 @@ if st.checkbox('処理開始'):
                 
             output_df['収支区分'] = '収入'
             output_df['発生日'] = selected_date
-            
+
             # 品目の整形
             output_df['品目'] = output_df['品目'].replace({
                 'その他/保険証忘れ': 'その他',
@@ -108,7 +108,7 @@ if st.checkbox('処理開始'):
             # CSVファイルとしてダウンロードするためのリンクを作成
             @st.cache
             def convert_df_to_csv(df):
-                return df.to_csv(index=False).encode('utf-8')
+                return df.to_csv(index=False).encode('cp932')
 
             csv_data = convert_df_to_csv(output_df)
             st.download_button(
