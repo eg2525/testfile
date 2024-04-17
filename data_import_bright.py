@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+st.title('test_code')
+
 # ファイルのアップロード
 uploaded_files = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsm'])
 
