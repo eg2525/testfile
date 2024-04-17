@@ -34,14 +34,8 @@ if st.checkbox('処理開始'):
                         if clean_index in data.columns:
                             value = data[clean_index].iloc[31] if len(data[clean_index]) > 31 else None
                             final_df.at[idx, column] = value
-        
-        edited_df = st.data_editor(final_df)
 
-        # 変更を保存すると、output_dfの生成を開始
         if st.button("変更を保存"):
-            final_df.update(edited_df)
-            st.success('変更がfinal_dfに保存されました。')
-
             # 新しいDataFrameのカラムを定義
             output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
             # 空のDataFrameを作成
@@ -51,13 +45,13 @@ if st.checkbox('処理開始'):
             for col in final_df.columns:
                 for idx in final_df.index:
                     value = final_df.at[idx, col]
-                    if value != None:  # セルの値が0ではない場合に転記
+                    if value != 0 and value is not None:  # セルの値が0でもNoneでもない場合に転記
                         new_row = pd.DataFrame({
                             '品目': [idx],
                             '部門': [col],
                             '金額': [value]
                         }, columns=output_columns)
-                        output_df = pd.concat([output_df, new_row], ignore_index=True)
+                        output_df = pd.concat([output_df, new_row], ignore_index=True)  # 新しい行をDataFrameに追加
 
             st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
-            st.write(output_df)
+            st.write(output_df)  # 最終的なDataFrameを表示
