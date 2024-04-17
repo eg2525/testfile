@@ -4,7 +4,7 @@ import pandas as pd
 st.title('test_code')
 
 # ファイルのアップロード
-uploaded_files = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsm'])
+uploaded_files = st.file_uploader("日計報告を全てアップロードしてください", accept_multiple_files=True, type=['xlsm'])
 
 # 月のリスト
 months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
