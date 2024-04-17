@@ -30,10 +30,15 @@ if st.checkbox('処理開始'):
             for column in columns:
                 if column in filename:
                     for idx in index:
-                        clean_index = idx.replace(' ', '')
-                        if clean_index in data.columns:
-                            value = data[clean_index].iloc[31] if len(data[clean_index]) > 31 else None
-                            final_df.at[idx, column] = value
+                        if idx == '口座振替':
+                            # 口座振替は特定のセルから値を取得します
+                            value = data.iloc[43, 7]  # 0-indexedでH44の値を取得
+                        else:
+                            clean_index = idx.replace(' ', '')
+                            if clean_index in data.columns:
+                                value = data[clean_index].iloc[31] if len(data[clean_index]) > 31 else None
+                        
+                        final_df.at[idx, column] = value
 
         # ここでデータフレームを表示します
         st.dataframe(final_df)
