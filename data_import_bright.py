@@ -50,27 +50,30 @@ if st.button('処理開始'):
                             final_df.at[idx, column] = value
 
         # DataFrameを表示
+        st.write("現在のDataFrame:")
         st.write(final_df)
 
-        # 入力要求とデータ更新
-        if st.checkbox("データを更新しますか？", key='update_data'):
-            for col in columns:
-                new_value = st.text_input(f"{col}の'[点]後期高齢'の新しい値を入力してください:", key=col)
-                if new_value:
-                    final_df.at['[点]後期高齢', col] = new_value
+        # '[点]後期高齢'に対する入力を求める
+        input_values = {}
+        for col in columns:
+            input_values[col] = st.text_input(f"{col}の'[点]後期高齢'の新しい値:", key=f"input_{col}")
 
-            # 更新後のDataFrameを表示
+        # 入力された値でDataFrameを更新
+        if st.button('データを更新'):
+            for col in columns:
+                if input_values[col]:
+                    final_df.at['[点]後期高齢', col] = input_values[col]
             st.write("更新されたDataFrame:")
             st.write(final_df)
 
             # CSVファイル名を指定して保存
-            csv_file_name = 'final_data.csv'
+            csv_file_name = 'updated_data.csv'
             final_df.to_csv(csv_file_name, encoding='utf-8')
 
             # ファイルをダウンロードするためのリンクを提供
             st.download_button(
-                label="Download data as CSV",
+                label="Download updated data as CSV",
                 data=final_df.to_csv().encode('utf-8'),
-                file_name='final_data.csv',
+                file_name=csv_file_name,
                 mime='text/csv',
             )
