@@ -34,8 +34,8 @@ if st.checkbox('処理開始'):
                             final_df.at[idx, column] = value
         
         edited_df = st.data_editor(final_df)
-        
+
         if st.button("変更を保存"):
             csv_file_name = 'updated_data.csv'
-            edited_df.to_csv(csv_file_name, encoding='cp932')
-            st.download_button("Download updated data as CSV", edited_df.to_csv().encode('utf-8'), file_name=csv_file_name, mime='text/csv')
+            edited_df.to_csv(csv_file_name, encoding='utf-8')
+            st.download_button("Download updated data as CSV", edited_df.to_csv().encode('cp932'), file_name=csv_file_name, mime='text/csv')
