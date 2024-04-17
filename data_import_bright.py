@@ -52,12 +52,12 @@ if st.checkbox('処理開始'):
                 for idx in final_df.index:
                     value = final_df.at[idx, col]
                     if value != 0:  # セルの値が0ではない場合に転記
-                        output_df = output_df.append({
-                                                       '品目': idx,
-                            '部門': col,
-                            '金額': value
-                        }, ignore_index=True)
+                        new_row = pd.DataFrame({
+                            '品目': [idx],
+                            '部門': [col],
+                            '金額': [value]
+                        }, columns=output_columns)
+                        output_df = pd.concat([output_df, new_row], ignore_index=True)
 
-            # 結果のDataFrameを表示
+            st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
             st.write(output_df)
-            
