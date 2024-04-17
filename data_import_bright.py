@@ -3,7 +3,7 @@ import pandas as pd
 import io
 
 # Streamlitのファイルアップロードウィジェットを使う
-uploaded_files = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsx'])
+uploaded_files = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsm'])
 
 # DataFrameを格納するための辞書
 dataframes = {}
