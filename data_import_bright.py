@@ -45,3 +45,33 @@ if st.checkbox('処理開始'):
 
         # ここでデータフレームを表示します
         st.dataframe(final_df)
+
+        if st.checkbox("OK"):
+            output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
+            output_df = pd.DataFrame(columns=output_columns)
+
+            for col in final_df.columns:
+                for idx in final_df.index:
+                    value = final_df.at[idx, col]
+
+                    # 空文字やNaNをNoneに統一し、数値型に変換を試みる
+                    if pd.isna(value):
+                        value = None
+                    else:
+                        try:
+                            # 数値型への強制変換を試みる
+                            value = float(value)
+                        except ValueError:
+                            continue  # 数値に変換できない場合はスキップ
+
+                    # Noneまたは0ではない場合に転記
+                    if value is not None and value != 0:
+                        new_row = pd.DataFrame({
+                            '品目': [idx],
+                            '部門': [col],
+                            '金額': [value]
+                        }, columns=output_columns)
+                        output_df = pd.concat([output_df, new_row], ignore_index=True)
+
+            st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
+            st.write(output_df)
