@@ -12,7 +12,6 @@ months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月"
 # ユーザーから月を選択してもらう
 selected_month = st.selectbox("読み込むシート名を選択してください:", months)
 
-# 処理開始のチェックボックスがチェックされ、ファイルがアップロードされ、処理が完了した後にデータフレームを表示
 if st.checkbox('処理開始'):
     if uploaded_files and selected_month:
         dataframes = {}
@@ -31,9 +30,10 @@ if st.checkbox('処理開始'):
                 if column in filename:
                     for idx in index:
                         if idx == '口座振替':
-                            # 口座振替は特定のセルから値を取得します
-                            if data.shape[0] > 35 and data.shape[1] > 6:  # セルの位置が存在するかチェック
-                                value = data.iloc[35, 6]  # 0-indexedでH44の値を取得
+                            # 口座振替は過不足返金の36行目から値を取得します
+                            key_column = '過不足金'
+                            if key_column in data.columns and len(data[key_column]) > 35:
+                                value = data[key_column].iloc[35]  # 0-indexedなので35が36行目
                             else:
                                 value = None
                         else:
