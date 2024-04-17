@@ -46,6 +46,8 @@ if st.checkbox('処理開始'):
         # ここでデータフレームを表示します
         st.dataframe(final_df)
 
+        selected_date = st.date_input("発生日を選択してください:", value=pd.to_datetime("today"))
+
         if st.checkbox("OK"):
             output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
             output_df = pd.DataFrame(columns=output_columns)
@@ -89,6 +91,9 @@ if st.checkbox('処理開始'):
                 tax_category, account = assign_tax_and_account(row['品目'])
                 output_df.at[index, '税区分'] = tax_category
                 output_df.at[index, '勘定科目'] = account
+                
+            output_df['収支区分'] = '収入'
+            output_df['発生日'] = selected_date
 
             st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
             st.write(output_df)
