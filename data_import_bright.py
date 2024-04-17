@@ -32,7 +32,10 @@ if st.checkbox('処理開始'):
                     for idx in index:
                         if idx == '口座振替':
                             # 口座振替は特定のセルから値を取得します
-                            value = data.iloc[43, 7]  # 0-indexedでH44の値を取得
+                            if data.shape[0] > 35 and data.shape[1] > 6:  # セルの位置が存在するかチェック
+                                value = data.iloc[35, 6]  # 0-indexedでH44の値を取得
+                            else:
+                                value = None
                         else:
                             clean_index = idx.replace(' ', '')
                             if clean_index in data.columns:
