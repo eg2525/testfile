@@ -34,6 +34,7 @@ if st.checkbox('処理開始'):
                             final_df.at[idx, column] = value
         
         edited_df = st.data_editor(final_df)
+        
         if st.button("変更を保存"):
             csv_file_name = 'updated_data.csv'
             edited_df.to_csv(csv_file_name, encoding='cp932')
