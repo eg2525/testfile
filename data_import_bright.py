@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 
 # ファイルのアップロード
-uploaded_files = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsm'])
+if 'uploaded_files' not in st.session_state:
+    st.session_state['uploaded_files'] = st.file_uploader("ファイルをアップロードしてください", accept_multiple_files=True, type=['xlsm'])
 
 # 月のリスト
 months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
@@ -12,6 +13,7 @@ selected_month = st.selectbox("読み込むシート名を選択してくださ�
 
 # 「処理開始」ボタン
 if st.button('処理開始'):
+    uploaded_files = st.session_state['uploaded_files']
     if uploaded_files and selected_month:
         # DataFrameを格納するための辞書
         dataframes = {}
