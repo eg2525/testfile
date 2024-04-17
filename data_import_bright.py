@@ -37,4 +37,4 @@ if st.checkbox('処理開始'):
         if st.button("変更を保存"):
             csv_file_name = 'updated_data.csv'
             edited_df.to_csv(csv_file_name, encoding='cp932')
-            st.download_button("Download updated data as CSV", edited_df.to_csv().encode('cp932'), file_name=csv_file_name, mime='text/csv')
+            st.download_button("Download updated data as CSV", edited_df.to_csv().encode('uft-8'), file_name=csv_file_name, mime='text/csv')
