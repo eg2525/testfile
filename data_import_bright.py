@@ -75,3 +75,23 @@ if st.checkbox('処理開始'):
 
             st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
             st.write(output_df)
+
+            # 品目に基づいて税区分と勘定科目を設定
+            def assign_tax_and_account(item):
+                if item in ['国保', '社保', '過不足金', '保険返金', 'その他/保険証忘れ']:
+                    return '非課売上', '保険診療収入（窓口）'
+                elif item in ['自費', '振込入金', '自費返金', 'JACCS入金', '口座振替']:
+                    return '課税売上10%', '自費収入'
+                elif item == '販売品':
+                    return '課税売上10%', '雑収入'
+                else:
+                    return None, None
+
+            # output_dfに税区分と勘定科目を追加
+            for index, row in output_df.iterrows():
+                tax_category, account = assign_tax_and_account(row['品目'])
+                output_df.at[index, '税区分'] = tax_category
+                output_df.at[index, '勘定科目'] = account
+
+            st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
+            st.write(output_df)
