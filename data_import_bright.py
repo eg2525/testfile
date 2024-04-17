@@ -37,7 +37,27 @@ if st.checkbox('処理開始'):
         
         edited_df = st.data_editor(final_df)
 
+        # 変更を保存すると、output_dfの生成を開始
         if st.button("変更を保存"):
-            # edited_dfの内容をfinal_dfに上書き保存
             final_df.update(edited_df)
             st.success('変更がfinal_dfに保存されました。')
+
+            # 新しいDataFrameのカラムを定義
+            output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
+            # 空のDataFrameを作成
+            output_df = pd.DataFrame(columns=output_columns)
+
+            # final_dfからoutput_dfへのデータ転記
+            for col in final_df.columns:
+                for idx in final_df.index:
+                    value = final_df.at[idx, col]
+                    if value != 0:  # セルの値が0ではない場合に転記
+                        output_df = output_df.append({
+                                                       '品目': idx,
+                            '部門': col,
+                            '金額': value
+                        }, ignore_index=True)
+
+            # 結果のDataFrameを表示
+            st.write(output_df)
+            
