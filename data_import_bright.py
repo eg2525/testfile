@@ -51,7 +51,7 @@ if st.checkbox('処理開始'):
             for col in final_df.columns:
                 for idx in final_df.index:
                     value = final_df.at[idx, col]
-                    if value != 0:  # セルの値が0ではない場合に転記
+                    if value != None:  # セルの値が0ではない場合に転記
                         new_row = pd.DataFrame({
                             '品目': [idx],
                             '部門': [col],
