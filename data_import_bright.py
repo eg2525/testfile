@@ -73,9 +73,6 @@ if st.checkbox('処理開始'):
                         }, columns=output_columns)
                         output_df = pd.concat([output_df, new_row], ignore_index=True)
 
-            st.success('変更がfinal_dfに保存され、データがoutput_dfに転記されました。')
-            st.write(output_df)
-
             # 品目に基づいて税区分と勘定科目を設定
             def assign_tax_and_account(item):
                 if item in ['国保', '社保', '過不足金', '保険返金', 'その他/保険証忘れ']:
