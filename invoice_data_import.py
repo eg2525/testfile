@@ -26,10 +26,12 @@ if st.checkbox("OK"):
     df.rename(columns={'社保窓口入金': '社保'}, inplace=True)
 
     # dfの値をoutput_dfに移す
+    rows = []
     for col in df.columns:
         for idx in df.index:
-            new_row = {'収支区分': '', '発生日': '', '取引先': '', '税区分': '', '勘定科目': '', '品目': col, '部門': idx, '金額': df.at[idx, col]}
-            output_df = output_df.append(new_row, ignore_index=True)
+            new_row = pd.DataFrame({'収支区分': [''], '発生日': [''], '取引先': [''], '税区分': [''], '勘定科目': [''], '品目': [col], '部門': [idx], '金額': [df.at[idx, col]]})
+            rows.append(new_row)
+    output_df = pd.concat(rows, ignore_index=True)
 
     # 結果のDataFrameを表示
     st.write(output_df)
