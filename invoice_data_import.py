@@ -13,7 +13,8 @@ edited_df = st.data_editor(df)
 
 if st.checkbox("OK"):
     df.update(edited_df, overwrite=True)
-    df = df.applymap(lambda x: x * 7 if pd.notna(x) else x)
+    df = df.applymap(lambda x: pd.to_numeric(x, errors='ignore'))
+    df = df.applymap(lambda x: x * 7 if pd.notna(x) and isinstance(x, (int, float)) else x)
 
     st.write(df)
 
