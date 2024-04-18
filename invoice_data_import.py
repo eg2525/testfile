@@ -12,6 +12,9 @@ df = pd.DataFrame(index=index, columns=columns)
 edited_df = st.data_editor(df)
 
 if st.checkbox("OK"):
+    df.update(edited_df, overwrite=True)
     output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
     output_df = pd.DataFrame(columns=output_columns)
+    df = df.applymap(lamba x: x *7 if pd.nonta(x) else x)
 
+    st.write(df)
