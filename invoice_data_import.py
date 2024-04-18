@@ -16,6 +16,8 @@ edited_df = st.data_editor(df)
 output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
 output_df = pd.DataFrame(columns=output_columns)
 
+selected_date = st.date_input("発生日を選択してください:", value=pd.to_datetime("today"))
+
 if st.checkbox("OK"):
     df.update(edited_df, overwrite=True)
     df = df.applymap(lambda x: pd.to_numeric(x, errors='ignore'))
@@ -42,7 +44,7 @@ if st.checkbox("OK"):
 
             # Noneまたは0ではない場合に転記
             if value is not None and value != 0:
-                new_row = pd.DataFrame({'収支区分': [''], '発生日': [''], '取引先': [''], '税区分': [''], '勘定科目': [''], '品目': [col], '部門': [idx], '金額': [value]}, columns=output_columns)
+                new_row = pd.DataFrame({'収支区分': ['収入'], '発生日': [''], '取引先': [selected_date], '税区分': ['非課売上'], '勘定科目': ['保険診療収入'], '品目': [col], '部門': [idx], '金額': [value]}, columns=output_columns)
                 output_df = pd.concat([output_df, new_row], ignore_index=True)
 
     # 結果のDataFrameを表示
