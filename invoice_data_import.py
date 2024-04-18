@@ -9,7 +9,12 @@ columns = ['社保窓口入金', '国保窓口入金', '後期高齢']
 # 空のDataFrameを作成
 df = pd.DataFrame(index=index, columns=columns)
 
+# 編集用のデータエディタを配置
 edited_df = st.data_editor(df)
+
+# 出力用DataFrameの列を定義
+output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
+output_df = pd.DataFrame(columns=output_columns)
 
 if st.checkbox("OK"):
     df.update(edited_df, overwrite=True)
@@ -20,13 +25,11 @@ if st.checkbox("OK"):
     df.drop(['国保窓口入金', '後期高齢'], axis=1, inplace=True)
     df.rename(columns={'社保窓口入金': '社保'}, inplace=True)
 
-    output_columns = ['収支区分', '発生日', '取引先', '税区分', '勘定科目', '品目', '部門', '金額']
-    output_df = pd.DataFrame(columns=output_columns)
-
     # dfの値をoutput_dfに移す
     for col in df.columns:
         for idx in df.index:
             new_row = {'収支区分': '', '発生日': '', '取引先': '', '税区分': '', '勘定科目': '', '品目': col, '部門': idx, '金額': df.at[idx, col]}
             output_df = output_df.append(new_row, ignore_index=True)
 
+    # 結果のDataFrameを表示
     st.write(output_df)
