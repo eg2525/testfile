@@ -18,6 +18,12 @@ output_df = pd.DataFrame(columns=output_columns)
 
 if st.checkbox("OK"):
     df.update(edited_df, overwrite=True)
+    df = df.applymap(lambda x: pd.to_numeric(x, errors='ignore'))
+    df = df.applymap(lambda x: x * 7 if pd.notna(x) and isinstance(x, (int, float)) else x)
+
+    df['国保'] = df['国保窓口入金'] + df['後期高齢']
+    df.drop(['国保窓口入金', '後期高齢'], axis=1, inplace=True)
+    df.rename(columns={'社保窓口入金': '社保'}, inplace=True)
 
     # dfの値をoutput_dfに移す
     for col in df.columns:
