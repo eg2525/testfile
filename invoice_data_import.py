@@ -49,3 +49,16 @@ if st.checkbox("OK"):
 
     # 結果のDataFrameを表示
     st.write(output_df)
+
+    # CSVファイルとしてダウンロードするためのリンクを作成
+    @st.cache
+    def convert_df_to_csv(df):
+        return df.to_csv(index=False).encode('cp932')
+
+    csv_data = convert_df_to_csv(output_df)
+    st.download_button(
+        label="Download data as CSV",
+        data=csv_data,
+        file_name='import_data(請求).csv',
+        mime='text/csv',
+    )
