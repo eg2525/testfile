@@ -13,7 +13,7 @@ edited_df = st.data_editor(df)
 
 if st.checkbox("OK"):
     df.update(edited_df, overwrite=True)
-    df = df.applymap(lamdba x: x *7 if pd.notna(x) else x)
+    df = df.applymap(lambda x: x * 7 if pd.notna(x) else x)
 
     st.write(df)
 
